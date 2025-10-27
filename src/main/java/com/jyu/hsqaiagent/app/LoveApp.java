@@ -1,11 +1,11 @@
 package com.jyu.hsqaiagent.app;
 
 import com.jyu.hsqaiagent.advisor.MyLoggerAdvisor;
+import com.jyu.hsqaiagent.rag.LoveAppRagCustomAdvisorFactory;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
-import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.client.advisor.api.Advisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.memory.InMemoryChatMemory;
@@ -92,7 +92,8 @@ public class LoveApp {
                         .param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 5))
                 .advisors(new MyLoggerAdvisor())
                 //问答拦截器
-                .advisors(new QuestionAnswerAdvisor(loveAppVectorStore))
+                //.advisors(new QuestionAnswerAdvisor(loveAppVectorStore))
+                .advisors(LoveAppRagCustomAdvisorFactory.createLoveAppRagCustomAdvisor(loveAppVectorStore,"单身"))
                 .call()
                 .chatResponse();
         String content = chatResponse.getResult().getOutput().getText();
