@@ -1,5 +1,6 @@
 package com.jyu.hsqaiagent.app;
 
+
 import com.jyu.hsqaiagent.advisor.MyLoggerAdvisor;
 import com.jyu.hsqaiagent.rag.LoveAppRagCustomAdvisorFactory;
 import jakarta.annotation.Resource;
@@ -11,6 +12,7 @@ import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.memory.InMemoryChatMemory;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Component;
 
@@ -34,6 +36,8 @@ public class LoveApp {
     @Resource
     private Advisor loveAppRagCloudAdvisor;
 
+    @Resource
+    private ToolCallback[] allTools;
 
     public LoveApp(ChatModel dashscopeChatModel) {
         //基于内存的对话存储
@@ -116,6 +120,28 @@ public class LoveApp {
                 .advisors(new MyLoggerAdvisor())
                 //检索增强顾问
                 .advisors(loveAppRagCloudAdvisor)
+                .call()
+                .chatResponse();
+        String content = chatResponse.getResult().getOutput().getText();
+        log.info("content: {}", content);
+        return content;
+    }
+
+    /**
+     * 基于工具调用
+     * @param message
+     * @param chatId
+     * @return
+     */
+    public String doChatWithTools(String message, String chatId) {
+        ChatResponse chatResponse = chatClient
+                .prompt()
+                .user(message)
+                .advisors(spec -> spec.param(CHAT_MEMORY_CONVERSATION_ID_KEY, chatId)
+                        .param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 5))
+                // 开启日志，便于观察效果
+                .advisors(new MyLoggerAdvisor())
+                .tools(allTools)
                 .call()
                 .chatResponse();
         String content = chatResponse.getResult().getOutput().getText();
