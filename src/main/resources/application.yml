@@ -3,11 +3,17 @@ spring:
     name: hsq-ai-agent
   profiles:
     active: local
+  ai:
+    mcp:
+      client:
+        stdio:
+          servers-configuration: classpath:mcp-servers.json
 server:
   port: 8123
   servlet:
     #所有请求后端的接口都需要在请求路径上加上/api，有利于与前端请求接口区分开
     context-path: /api
+
 
 springdoc:
   swagger-ui:

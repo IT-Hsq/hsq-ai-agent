@@ -1,0 +1,13 @@
+package com.jyu.hsqimagesearchmcp;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class HsqImageSearchMcpApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(HsqImageSearchMcpApplication.class, args);
+    }
+
+}
