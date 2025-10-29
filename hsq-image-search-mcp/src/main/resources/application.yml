@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: hsq-image-search-mcp-server
+  profiles:
+    active: see
+server:
+  port: 8127
