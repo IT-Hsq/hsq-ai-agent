@@ -11,9 +11,9 @@ import org.springframework.context.annotation.Configuration;
 import java.util.List;
 
 @Configuration
-public class LoveAppVectorStoreConfig {
+public class MediaCreationAppVectorStoreConfig {
     @Resource
-    private LoveAppDocumentLoader loveAppDocumentLoader;
+    private MediaCreationAppDocumentLoader loveAppDocumentLoader;
 
     @Bean
     VectorStore loveAppVectorStore(EmbeddingModel dashscopeEmbeddingModel) {

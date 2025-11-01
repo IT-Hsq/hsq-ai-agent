@@ -2,7 +2,7 @@ package com.jyu.hsqaiagent.app;
 
 
 import com.jyu.hsqaiagent.advisor.MyLoggerAdvisor;
-import com.jyu.hsqaiagent.rag.LoveAppRagCustomAdvisorFactory;
+import com.jyu.hsqaiagent.rag.MediaCreationAppRagCustomAdvisorFactory;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
@@ -25,11 +25,16 @@ import static org.springframework.ai.chat.client.advisor.AbstractChatMemoryAdvis
 
 @Component
 @Slf4j
-public class LoveApp {
-    private static final String SYSTEM_PROMPT = "扮演深耕恋爱心理领域的专家。开场向用户表明身份，告知用户可倾诉恋爱难题。" +
-            "围绕单身、恋爱、已婚三种状态提问：单身状态询问社交圈拓展及追求心仪对象的困扰；" +
-            "恋爱状态询问沟通、习惯差异引发的矛盾；已婚状态询问家庭责任与亲属关系处理的问题。" +
-            "引导用户详述事情经过、对方反应及自身想法，以便给出专属解决方案。输出字数控制在100个字内";
+public class CreationApp {
+    private static final String SYSTEM_PROMPT = "你是拥有 5 年 + 一线自媒体实战经验的创作专家，曾操盘美妆、职场、母婴等领域账号从 0 到 1 起号" +
+            "（单账号最高 100 万 + 粉丝、单条内容最高 500 万 + 播放量），擅长 “账号定位→内容创作→数据优化→变现落地” 全链路问题解决。现以 “创作咨" +
+            "询顾问” 身份与用户互动，核心逻辑是：通过层层引导式提问挖掘用户真实需求与现状，再提供针对性可落地建议，具体执行要求如下：身份与语气：" +
+            "以 “我之前帮 XX 领域账号解决过类似问题” 强化专家感，语气如同行交流（避免说教），每轮回复先提问引导用户补充信息，再基于已有信息做 2 句" +
+            "话内的简要拆解，不单向输出。需求挖掘框架：第一轮必问账号基础盘（领域 / 细分方向、运营平台、所处阶段，选 1 个延伸追问定位 / 平台相关细节）" +
+            "；第二轮引导用户明确当前最痛创作痛点（选题 / 文案 / 数据 / 剪辑等），并拆解痛点细节（如选题难则问 “过往找选题的方式”）；第三轮问痛点解决" +
+            "的过往尝试与效果，补充确认用户是否有明确受众画像；第四轮问 1-2 周短期目标与日常创作时间，适配建议节奏。输出原则：用户至少回答 2 轮后再给建" +
+            "议，建议需绑定用户场景（如 “结合你职场号 + 小红书冷启动的情况”），给出初步建议后需追问适配性（如 “这个方法你觉得能操作吗？”）；禁止一上来给" +
+            "通用模板、堆砌专业术语（不说 “内容垂直度”，改说 “围绕细分方向发内容”）、回避用户问题";
     private final ChatClient chatClient;
 
     @Resource
@@ -44,7 +49,7 @@ public class LoveApp {
     @Resource
     private ToolCallback[] allTools;
 
-    public LoveApp(ChatModel dashscopeChatModel) {
+    public CreationApp(ChatModel dashscopeChatModel) {
         //基于内存的对话存储
         ChatMemory chatMemory = new InMemoryChatMemory();
         chatClient = ChatClient.builder(dashscopeChatModel)
@@ -102,7 +107,7 @@ public class LoveApp {
                 .advisors(new MyLoggerAdvisor())
                 //问答拦截器
                 //.advisors(new QuestionAnswerAdvisor(loveAppVectorStore))
-                .advisors(LoveAppRagCustomAdvisorFactory.createLoveAppRagCustomAdvisor(loveAppVectorStore,"单身"))
+                .advisors(MediaCreationAppRagCustomAdvisorFactory.createLoveAppRagCustomAdvisor(loveAppVectorStore,"单身"))
                 .call()
                 .chatResponse();
         String content = chatResponse.getResult().getOutput().getText();

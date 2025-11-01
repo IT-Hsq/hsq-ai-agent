@@ -14,12 +14,14 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @Slf4j
-class LoveAppRagCloudAdvisorConfig {
+class MediaCreationAppRagCloudAdvisorConfig {
     @Value("${spring.ai.dashscope.api-key}")
     private String dashScopeApiKey;
 
     @Bean
     public Advisor loveAppRagCloudAdvisor() {
+
+        //TODO:需要修改
         DashScopeApi dashScopeApi = new DashScopeApi(dashScopeApiKey);
         final String KNOWLEDGE_INDEX = "恋爱大师";
         DocumentRetriever documentRetriever = new DashScopeDocumentRetriever(dashScopeApi,

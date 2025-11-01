@@ -9,7 +9,7 @@ import org.springframework.ai.vectorstore.filter.Filter;
 import org.springframework.ai.vectorstore.filter.FilterExpressionBuilder;
 
 @Slf4j
-public class LoveAppRagCustomAdvisorFactory {
+public class MediaCreationAppRagCustomAdvisorFactory {
     public static Advisor createLoveAppRagCustomAdvisor(VectorStore vectorStore, String status) {
         Filter.Expression expression = new FilterExpressionBuilder()
                 .eq("status", status)

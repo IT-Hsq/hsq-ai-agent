@@ -1,7 +1,7 @@
 package com.jyu.hsqaiagent.controller;
 
-import com.jyu.hsqaiagent.agent.model.HsqManus;
-import com.jyu.hsqaiagent.app.LoveApp;
+import com.jyu.hsqaiagent.agent.MediaManus;
+import com.jyu.hsqaiagent.app.CreationApp;
 import jakarta.annotation.Resource;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.tool.ToolCallback;
@@ -20,7 +20,7 @@ import java.io.IOException;
 public class AiController {
 
     @Resource
-    private LoveApp loveApp;
+    private CreationApp loveApp;
 
     @Resource
     private ToolCallback[] allTools;
@@ -99,7 +99,7 @@ public class AiController {
      */
     @GetMapping("/manus/chat")
     public SseEmitter doChatWithManus(String message) {
-        HsqManus yuManus = new HsqManus(allTools, dashscopeChatModel);
-        return yuManus.runStream(message);
+        MediaManus mediaManus = new MediaManus(allTools, dashscopeChatModel);
+        return mediaManus.runStream(message);
     }
 }

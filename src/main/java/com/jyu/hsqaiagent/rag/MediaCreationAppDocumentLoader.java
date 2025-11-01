@@ -14,11 +14,11 @@ import java.util.List;
 
 @Slf4j
 @Component
-public class LoveAppDocumentLoader {
+public class MediaCreationAppDocumentLoader {
 
     private ResourcePatternResolver resourcePatternResolver;
 
-    LoveAppDocumentLoader(ResourcePatternResolver resourcePatternResolver) {
+    MediaCreationAppDocumentLoader(ResourcePatternResolver resourcePatternResolver) {
         this.resourcePatternResolver = resourcePatternResolver;
     }
     public List<Document> loadMarkdowns(){
