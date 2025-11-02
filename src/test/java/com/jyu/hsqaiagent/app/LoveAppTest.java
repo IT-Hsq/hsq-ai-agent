@@ -33,7 +33,7 @@ class LoveAppTest {
     void doChatWithReport() {
         String chatId = UUID.randomUUID().toString();
         String message = "你好，我是小明，我想让另一半小蓝更爱我，但我不知道该怎么做";
-        CreationApp.LoveReport loveReport = loveApp.doChatWithReport(message, chatId);
+        CreationApp.MediaReport loveReport = loveApp.doChatWithReport(message, chatId);
         Assertions.assertNotNull(loveReport);
     }
 

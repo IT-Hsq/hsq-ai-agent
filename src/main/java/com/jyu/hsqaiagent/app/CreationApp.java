@@ -7,6 +7,7 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
+import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.client.advisor.api.Advisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.memory.InMemoryChatMemory;
@@ -38,10 +39,10 @@ public class CreationApp {
     private final ChatClient chatClient;
 
     @Resource
-    private VectorStore loveAppVectorStore;
+    private VectorStore mediaCreationAppVectorStore;
 
     @Resource
-    private Advisor loveAppRagCloudAdvisor;
+    private Advisor mediaCreationAppRagCloudAdvisor;
 
     @Resource
     private ToolCallbackProvider toolCallbackProvider;
@@ -55,7 +56,9 @@ public class CreationApp {
         chatClient = ChatClient.builder(dashscopeChatModel)
                 .defaultSystem(SYSTEM_PROMPT)
                 .defaultAdvisors(
+                        //对话记忆增强顾问
                         new MessageChatMemoryAdvisor(chatMemory),
+                        //日志增强顾问
                         new MyLoggerAdvisor()
                 )
                 .build();
@@ -76,18 +79,18 @@ public class CreationApp {
     }
 
     //java14之后的新特性，可以通过record快速定义一个类
-    //恋爱报告类
-    record LoveReport(String title, List<String> suggestion){}
+    //自媒体数据报告类
+    record MediaReport(String title, List<String> suggestion){}
 
-    public LoveReport doChatWithReport(String message, String chatId) {
-        LoveReport loveReprot = chatClient
+    public MediaReport doChatWithReport(String message, String chatId) {
+        MediaReport loveReprot = chatClient
                 .prompt()
-                .system(SYSTEM_PROMPT + "每次对话后都要生成恋爱结果，标题为{用户名}的恋爱报告，内容为建议列表")
+                .system(SYSTEM_PROMPT + "每次对话后都要生成相应的结果，标题为{用户名}的自媒体数据报告，内容为建议列表")
                 .user(message)
                 .advisors(spec -> spec.param(CHAT_MEMORY_CONVERSATION_ID_KEY, chatId)
                         .param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 5))
                 .call()
-                .entity(LoveReport.class);
+                .entity(MediaReport.class);
         log.info("loveReport: {}", loveReprot);
         return loveReprot;
     }
@@ -104,10 +107,9 @@ public class CreationApp {
                 .user(message)
                 .advisors(spec -> spec.param(CHAT_MEMORY_CONVERSATION_ID_KEY, chatId)
                         .param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 5))
-                .advisors(new MyLoggerAdvisor())
                 //问答拦截器
-                //.advisors(new QuestionAnswerAdvisor(loveAppVectorStore))
-                .advisors(MediaCreationAppRagCustomAdvisorFactory.createLoveAppRagCustomAdvisor(loveAppVectorStore,"单身"))
+                .advisors(new QuestionAnswerAdvisor(mediaCreationAppVectorStore))
+                .advisors(MediaCreationAppRagCustomAdvisorFactory.createLoveAppRagCustomAdvisor(mediaCreationAppVectorStore,"单身"))
                 .call()
                 .chatResponse();
         String content = chatResponse.getResult().getOutput().getText();
@@ -129,7 +131,7 @@ public class CreationApp {
                         .param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 5))
                 .advisors(new MyLoggerAdvisor())
                 //检索增强顾问
-                .advisors(loveAppRagCloudAdvisor)
+                .advisors(mediaCreationAppRagCloudAdvisor)
                 .call()
                 .chatResponse();
         String content = chatResponse.getResult().getOutput().getText();
@@ -181,8 +183,6 @@ public class CreationApp {
                 .user(message)
                 .advisors(spec -> spec.param(CHAT_MEMORY_CONVERSATION_ID_KEY, chatId)
                         .param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 5))
-                // 开启日志，便于观察效果
-                .advisors(new MyLoggerAdvisor())
                 .tools(toolCallbackProvider)
                 .call()
                 .chatResponse();

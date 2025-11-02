@@ -6,6 +6,9 @@ import reactor.core.publisher.Flux;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 重读增强顾问
+ */
 public class ReReadingAdvisor implements CallAroundAdvisor, StreamAroundAdvisor {
 
     private AdvisedRequest before(AdvisedRequest advisedRequest) {

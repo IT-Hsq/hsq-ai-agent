@@ -10,17 +10,20 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
+/**
+ * 把文档转成向量存入基于内存读写的向量数据库SimpleVectorStore
+ */
 @Configuration
 public class MediaCreationAppVectorStoreConfig {
     @Resource
-    private MediaCreationAppDocumentLoader loveAppDocumentLoader;
+    private MediaCreationAppDocumentLoader mediaCreationAppDocumentLoader;
 
     @Bean
     VectorStore loveAppVectorStore(EmbeddingModel dashscopeEmbeddingModel) {
         //基于内存读写的向量数据库SimpleVectorStore
         SimpleVectorStore simpleVectorStore = SimpleVectorStore.builder(dashscopeEmbeddingModel)
                 .build();
-        List<Document> documents = loveAppDocumentLoader.loadMarkdowns();
+        List<Document> documents = mediaCreationAppDocumentLoader.loadMarkdowns();
         simpleVectorStore.doAdd(documents);
         return simpleVectorStore;
     }

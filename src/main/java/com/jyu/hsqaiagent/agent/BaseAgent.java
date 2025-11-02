@@ -105,7 +105,7 @@ public abstract class BaseAgent {
             // 1、基础校验
             try {
                 if (this.state != AgentState.IDLE) {
-                    sseEmitter.send("错误：无法从状态运行代理：" + this.state);
+                    sseEmitter.send("错误：当前运行状态代理为：" + this.state);
                     sseEmitter.complete();
                     return;
                 }
