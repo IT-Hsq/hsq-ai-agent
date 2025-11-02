@@ -1,3 +1,4 @@
+/*
 package com.jyu.hsqaiagent.tools;
 
 import cn.hutool.http.HttpUtil;
@@ -12,9 +13,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+*/
 /**
  * 网页搜索工具
- */
+ *//*
+
 public class WebSearchTool {
 
     // SearchAPI 的搜索接口地址
@@ -51,3 +54,4 @@ public class WebSearchTool {
         }
     }
 }
+*/

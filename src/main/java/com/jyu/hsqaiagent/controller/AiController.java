@@ -48,7 +48,7 @@ public class AiController {
      * @return
      */
     @GetMapping(value = "/mediaCreation_app/chat/sse", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<String> doChatWithLoveAppSSE(String message, String chatId) {
+    public Flux<String> doChatWithMediaCreationAppSSE(String message, String chatId) {
         return loveApp.doChatByStream(message, chatId);
     }
 
@@ -60,7 +60,7 @@ public class AiController {
      * @return
      */
     @GetMapping(value = "/mediaCreation_app/chat/sse_emitter")
-    public SseEmitter doChatWithLoveAppServerSseEmitter(String message, String chatId) {
+    public SseEmitter doChatWithMediaCreationAppServerSseEmitter(String message, String chatId) {
         // 创建一个超时时间较长的 SseEmitter
         SseEmitter sseEmitter = new SseEmitter(180000L); // 3 分钟超时
         // 获取 Flux 响应式数据流并且直接通过订阅推送给 SseEmitter
