@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class LoveAppTest {
+class CreationAppTest {
 
     @Resource
     private CreationApp loveApp;
@@ -16,15 +16,15 @@ class LoveAppTest {
     void testChat() {
         String chatId = UUID.randomUUID().toString();
 
-        String message = "你好，我是小明";
+        String message = "你好";
         String answer = loveApp.doChat(message, chatId);
         Assertions.assertNotNull(answer);
 
-        message = "我的另一半是小黄";
+        message = "我是小明";
         answer = loveApp.doChat(message, chatId);
         Assertions.assertNotNull(answer);
 
-        message = "我的另一半叫什么来着？刚跟你说过，帮我回忆一下";
+        message = "我叫什么来着？刚跟你说过，帮我回忆一下";
         answer = loveApp.doChat(message, chatId);
         Assertions.assertNotNull(answer);
     }
@@ -32,7 +32,7 @@ class LoveAppTest {
     @Test
     void doChatWithReport() {
         String chatId = UUID.randomUUID().toString();
-        String message = "你好，我是小明，我想让另一半小蓝更爱我，但我不知道该怎么做";
+        String message = "你好，我是小明，我想要发布第一个抖音视频，但我不知道该怎么做";
         CreationApp.MediaReport loveReport = loveApp.doChatWithReport(message, chatId);
         Assertions.assertNotNull(loveReport);
     }
@@ -40,7 +40,7 @@ class LoveAppTest {
     @Test
     void doChatWithRag() {
         String chatId = UUID.randomUUID().toString();
-        String message = "如何克服单身时对恋爱的焦虑情绪？";
+        String message = "如何克服被恶意评论的焦虑情绪？";
         String answer =  loveApp.doChatWithRag(message, chatId);
         Assertions.assertNotNull(answer);
     }
@@ -48,7 +48,7 @@ class LoveAppTest {
     @Test
     void doChatWithCloudRag() {
         String chatId = UUID.randomUUID().toString();
-        String message = "我已经结婚了，但是婚后如何平衡工作与家庭责任？";
+        String message = "你好，我是小明，我想要发布第一个抖音视频，但我不知道该怎么做";
         String answer =  loveApp.doChatWithCloudRag(message, chatId);
         Assertions.assertNotNull(answer);
     }
@@ -56,15 +56,13 @@ class LoveAppTest {
     @Test
     void doChatWithTools() {
 
-        testMessage("看看编程导航网站（codefather.cn）有什么内容？");
+        testMessage("看看www.baidu.com有什么内容？");
 
-        //testMessage("直接下载一张适合做手机壁纸的星空情侣图片为文件");
+        //testMessage("直接下载一张氛围感图片");
 
         //testMessage("执行 Python3 脚本来生成数据分析报告");
 
-        //testMessage("保存我的恋爱档案为文件");
-
-        //testMessage("生成一份‘七夕约会计划’PDF，包含餐厅预订、活动流程和礼物清单");
+        //testMessage("生成一份‘推荐汕尾游玩攻略’PDF");
     }
 
     private void testMessage(String message) {
@@ -76,7 +74,7 @@ class LoveAppTest {
     @Test
     void doChatWithMcp() {
         String chatId = UUID.randomUUID().toString();
-        String message = "帮我搜索一些哄另一半开心的图片";
+        String message = "帮我搜索一些开心的图片";
         String answer =  loveApp.doChatWithMcp(message, chatId);
         Assertions.assertNotNull(answer);
     }
